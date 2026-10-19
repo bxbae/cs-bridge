@@ -49,7 +49,11 @@ def rate(n: int, d: int) -> float | None:
 
 
 def main():
-    llm = get_llm()
+    try:
+        llm = get_llm()
+    except LLMError as exc:
+        print(f"::error title=LLM setup::{exc}" if os.getenv("GITHUB_ACTIONS") == "true" else str(exc))
+        raise SystemExit(1)
     retriever = get_retriever()
     triage = load("triage_cases.jsonl")
     guards = load("guard_cases.jsonl")
@@ -59,7 +63,7 @@ def main():
     misses: list[str] = []
 
     # ---------- 1. triage + retrieval + drafts (one pass per inquiry) ----------
-    cat_ok = hit1 = hit3 = doc3 = 0
+    cat_ok = hit1 = hit3 = doc3 = analyzed = analyzed_answerable = 0
     answerable = [c for c in triage if c["expected_chunk"]]
     draft_total = draft_passed = cases_with_safe_draft = drafted_cases = 0
     risk = Counter()
@@ -74,6 +78,8 @@ def main():
         except LLMError as exc:
             errors.append(f"analyze: `{case['message'][:50]}` → {exc}")
             continue
+        analyzed += 1
+        analyzed_answerable += bool(case["expected_chunk"])
         cat_ok += analysis["category"] == case["category"]
         if analysis["category"] != case["category"]:
             misses.append(f"- category: `{case['message']}` → expected {case['category']}, got {analysis['category']}")
@@ -135,7 +141,7 @@ def main():
         caught += g["expected"] == "block" and got == "block"
         guard_rows.append(f"| {g['reply'][:60]} | {g['expected']} | {got} | {'✅' if got == g['expected'] else '❌'} |")
 
-    n, na = len(triage), len(answerable)
+    n, na = analyzed, analyzed_answerable  # rates over cases whose LLM call succeeded
     metrics = {
         "provider": llm.name,
         "model": getattr(llm, "model", None),
@@ -211,8 +217,25 @@ def main():
     if name == "mock":
         (HERE / "report.md").write_text("\n".join(report) + "\n", encoding="utf-8")
     print(json.dumps({k: v for k, v in metrics.items() if k not in ("latency_ms", "tokens")}, indent=2, ensure_ascii=False))
+    gha = os.getenv("GITHUB_ACTIONS") == "true"
+    if gha:  # annotations show on the run page even where raw logs are not readable
+        p_ = lambda k: "–" if metrics.get(k) is None else f"{metrics[k] * 100:.1f}%"  # noqa: E731
+        print(f"::notice title=Eval summary::category {p_('category_accuracy')}, hit@1 {p_('retrieval_hit@1')}, hit@3 {p_('retrieval_hit@3')}, "
+              f"drafts pass {p_('draft_guard_pass_rate')}, safe draft {p_('cases_with_a_safe_draft')}, "
+              f"tr numbers {p_('translation_numbers_preserved')}, tr glossary {p_('translation_glossary_compliance')}, tr pass {p_('translation_guard_pass_rate')}, "
+              f"first draft p50 {metrics['first_draft_ms_p50']} ms, errors {len(errors)}")
+        for k, v in (metrics.get("tokens") or {}).items():
+            print(f"::notice title=Tokens {k}::calls {v['calls']}, in {v['input']}, out {v['output']}, avg out {v['avg_output_per_call']}, stops {v['stop_reasons']}")
+        for k, v in metrics["latency_ms"].items():
+            print(f"::notice title=Latency {k}::p50 {v['p50']} ms, p95 {v['p95']} ms")
+        for m in misses[:20]:
+            print(f"::warning title=Miss::{m[2:300]}")
     if errors:
         print(f"{len(errors)} LLM errors (see report)")
+        for e in sorted(set(e.split(" → ", 1)[-1] for e in errors))[:5]:
+            print(f"::error title=LLM error::{e}" if gha else f"  {e}")
+    if errors and len(errors) >= len(triage) + len(translations):
+        raise SystemExit("every LLM call failed")
 
 
 if __name__ == "__main__":

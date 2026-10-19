@@ -16,6 +16,16 @@ from .base import LLMError, parse_json_object
 MAX_TOKENS = {"analyze": 4000, "drafts": 8000, "translate": 4000, "summary": 4000}
 
 
+def _api_message(exc) -> str:
+    """The API's own error type and message, without the request body."""
+    body = getattr(exc, "body", None)
+    if isinstance(body, dict):
+        err = body.get("error") or {}
+        if isinstance(err, dict) and err.get("message"):
+            return f"{err.get('type', 'error')}: {err['message']}"[:300]
+    return str(getattr(exc, "message", exc))[:300]
+
+
 class AnthropicProvider:
     name = "anthropic"
 
@@ -24,6 +34,7 @@ class AnthropicProvider:
             raise LLMError("ANTHROPIC_API_KEY is not set (or use LLM_PROVIDER=mock)")
         import anthropic  # imported lazily so the mock mode needs no SDK
 
+        self._anthropic = anthropic
         self._client = anthropic.Anthropic(api_key=api_key, max_retries=2, timeout=90)
         self.model = model
         self.effort = os.getenv("ANTHROPIC_EFFORT", "low").strip()
@@ -46,13 +57,18 @@ class AnthropicProvider:
         for attempt in range(2):
             prompt = user if attempt == 0 else user + "\n\nReturn ONLY one valid JSON object, no prose."
             start = time.perf_counter()
-            response = self._client.messages.create(
-                model=self.model,
-                max_tokens=MAX_TOKENS.get(task, 4000) * (2 if attempt else 1),
-                system=system,
-                messages=[{"role": "user", "content": prompt}],
-                extra_body=extra_body,
-            )
+            try:
+                response = self._client.messages.create(
+                    model=self.model,
+                    max_tokens=MAX_TOKENS.get(task, 4000) * (2 if attempt else 1),
+                    system=system,
+                    messages=[{"role": "user", "content": prompt}],
+                    extra_body=extra_body,
+                )
+            except self._anthropic.APIStatusError as exc:
+                raise LLMError(f"{task}: HTTP {exc.status_code} {_api_message(exc)}") from exc
+            except self._anthropic.APIError as exc:  # connection errors, timeouts
+                raise LLMError(f"{task}: {type(exc).__name__}: {exc}") from exc
             self._record(task, response, time.perf_counter() - start)
             if response.stop_reason == "refusal":
                 raise LLMError(f"{task}: model declined the request")
