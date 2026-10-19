@@ -117,3 +117,39 @@ export interface Health {
   llm_provider: string;
   kb_chunks: number;
 }
+
+export interface DashboardDay {
+  date: string;
+  chat: number;
+  email: number;
+  inquiries: number;
+  replies: number;
+  from_draft: number;
+  drafts: number;
+  blocked: number;
+  adoption_rate: number | null;
+}
+
+export interface Dashboard {
+  days: number;
+  timezone: string;
+  daily: DashboardDay[];
+  totals: {
+    inquiries: number;
+    week: number;
+    week_prev: number;
+    week_delta: number | null;
+    replies: number;
+    adoption_rate: number | null;
+    avg_first_draft_ms: number | null;
+    drafts: number;
+    blocked: number;
+    open_waiting: number;
+    high_waiting: number;
+  };
+  by_category: Record<string, number>;
+  by_status: Record<string, number>;
+  guard_findings: Record<string, number>;
+  queue: { id: number; customer_name: string; channel: Channel; category: string | null; urgency: string | null; sentiment: string | null; preview: string; waiting_minutes: number }[];
+  recent: { conversation_id: number; customer_name: string; channel: Channel; role: "customer" | "agent"; category: string | null; at: string; text: string }[];
+}

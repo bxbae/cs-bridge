@@ -18,7 +18,7 @@ function DraftCard({
 }) {
   const [showKo, setShowKo] = useState(false);
   return (
-    <div className="rounded-xl border border-ink-100 bg-surface p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+    <div className="rounded-2xl border border-ink-100 bg-surface p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
       <div className="mb-2 flex items-center gap-2">
         <span className="text-xs font-semibold">{STYLE_KO[draft.style]}</span>
         <ValidationBadge v={draft.validation} />
@@ -90,7 +90,7 @@ export function CopilotPanel({
   const drafts = (a?.drafts ?? []).filter((d) => !hidden[`${last?.id}-${d.style}`]);
 
   return (
-    <aside className="scroll-thin flex w-[420px] shrink-0 flex-col gap-4 overflow-y-auto border-l border-ink-100 bg-ink-50 p-4">
+    <aside className="scroll-thin flex w-[420px] shrink-0 flex-col gap-4 overflow-y-auto rounded-3xl bg-surface-2 p-4">
       {cls && (
         <section>
           <h3 className="panel-title mb-2">문의 분석</h3>

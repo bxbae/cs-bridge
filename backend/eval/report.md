@@ -12,7 +12,7 @@ Provider: **mock**
 | guard_cases | 12 |
 | guard_accuracy | 1.0 |
 | guard_block_recall | 1.0 |
-| triage_latency_ms_p50 | 0.0 |
+| triage_latency_ms_p50 | 0.1 |
 
 ## Guard cases
 

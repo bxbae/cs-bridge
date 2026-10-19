@@ -21,19 +21,19 @@ export function ConversationList({
   const shown = items.filter((c) => filter === "all" || c.channel === filter);
 
   return (
-    <aside className="flex w-80 shrink-0 flex-col border-r border-ink-100 bg-surface">
+    <aside className="card flex w-80 shrink-0 flex-col overflow-hidden">
       <div className="flex items-center justify-between px-4 pb-2 pt-4">
         <h2 className="text-sm font-semibold">문의함</h2>
         <button className="btn-primary px-2.5 py-1 text-xs" onClick={onNew}>
           + 새 문의
         </button>
       </div>
-      <div className="mx-4 mb-2 flex rounded-lg bg-ink-100 p-0.5 text-xs">
+      <div className="mx-4 mb-2 flex rounded-full bg-ink-100 p-0.5 text-xs">
         {(["all", "chat", "email"] as Filter[]).map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`flex-1 rounded-md py-1 font-medium transition ${filter === f ? "bg-surface shadow-sm" : "text-ink-500"}`}
+            className={`flex-1 rounded-full py-1 font-medium transition ${filter === f ? "bg-surface shadow-sm" : "text-ink-500"}`}
           >
             {f === "all" ? "전체" : CHANNEL_KO[f]}
             <span className="ml-1 text-ink-500">{items.filter((c) => f === "all" || c.channel === f).length}</span>

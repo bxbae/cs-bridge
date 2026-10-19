@@ -19,6 +19,7 @@ class Settings:
     brand_name: str = os.getenv("BRAND_NAME", "Starfall Odyssey Support")
     top_k: int = int(os.getenv("RETRIEVAL_TOP_K", "3"))
     cors_origins: str = os.getenv("CORS_ORIGINS", "http://localhost:3000")
+    timezone: str = os.getenv("APP_TIMEZONE", "Asia/Seoul")
 
 
 settings = Settings()

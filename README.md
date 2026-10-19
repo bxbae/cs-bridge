@@ -6,9 +6,16 @@
 > 기획 배경: 게임사 글로벌 서버 북미 고객지원 5년 4개월 동안 영어 문의 응대·패치 공지 번역을 하며 겪은 문제
 > (번역 시간, 정책에 없는 약속, 용어 불일치, 상담 기록 작성 부담)를 LLM으로 해결합니다.
 
-| 라이트 | 다크 |
+### 디자인 시안 (헤더에서 1안·2안 전환, 각각 라이트·다크)
+
+| | 라이트 | 다크 |
+|---|---|---|
+| **1안** · 블루, 상단 필 메뉴 | ![1안 라이트](docs/dash-a-light.png) | ![1안 다크](docs/dash-a-dark.png) |
+| **2안** · 인디고·코랄, 아이콘 레일 | ![2안 라이트](docs/dash-b-light.png) | ![2안 다크](docs/dash-b-dark.png) |
+
+| 상담 콘솔 (1안 라이트) | 상담 콘솔 (2안 다크) |
 |---|---|
-| ![console](docs/console.png) | ![console dark](docs/console-dark.png) |
+| ![콘솔 1안](docs/console-a-light.png) | ![콘솔 2안](docs/console-b-dark.png) |
 
 ## 주요 기능
 
@@ -22,7 +29,11 @@
 | 검증 가드 | 아래 표 참고. `error`가 있으면 **보내기 버튼 비활성화 + 서버에서도 422로 차단** |
 | 상담 기록 | 요약, 문의 내용, 조치, 후속 조치, 이관 여부, 태그 |
 | KPI | 초안 채택률, 평균 수정률, 첫 초안까지 시간, 가드가 차단한 초안 수 |
-| 다크 모드 | 라이트·다크·자동(OS 설정 추종), 새로고침 시 깜빡임 없음 |
+| 대시보드 | 채팅·이메일 문의 추이, 초안 채택률 추이, 카테고리별 문의, 처리 현황, 답변 대기 큐, 가드 경고 유형, CSV 내보내기 |
+| 지식베이스 | 근거 정책 문서·용어집 검색 |
+| 디자인 | 1안·2안 전환, 라이트·다크·자동(OS 설정 추종), 새로고침 시 깜빡임 없음 |
+
+차트는 외부 라이브러리 없이 SVG로 직접 그렸습니다. 시리즈 색은 색각이상(CVD) 구분·밝기 대역·대비를 검사기로 확인했고(디자인·모드별), 대비가 낮은 색을 쓰는 차트에는 범례·툴팁·"표로 보기"를 함께 둡니다.
 
 ### 검증 가드 (`backend/app/pipeline/validate.py`)
 
@@ -72,6 +83,8 @@ export LLM_PROVIDER=anthropic ANTHROPIC_API_KEY=sk-ant-...
 
 Docker: `cp .env.example .env && docker compose up --build`
 
+첫 실행 시 데모 데이터가 생성됩니다: 오늘 문의 4건 + 대시보드용 지난 13일 이력(평가 문항을 실제 파이프라인에 통과시킨 뒤 날짜만 과거로 조정, 상담원 동작은 시뮬레이션). 이력 생성은 mock 모드에서만 기본 실행되며(`SEED_HISTORY=auto`), 실제 LLM에서도 만들려면 `SEED_HISTORY=1`.
+
 테스트: `cd backend && pytest -q` (26개)
 
 ## 구조
@@ -80,6 +93,7 @@ Docker: `cp .env.example .env && docker compose up --build`
 backend/app
 ├── main.py              FastAPI 라우트
 ├── service.py           상담 워크플로 (고객 메시지 → 분석·검색·초안·검증 / 상담원 답변 / 요약 / KPI)
+├── dashboard.py         대시보드 집계 (일별 추이, 카테고리, 큐, 가드 경고)
 ├── llm/                 Provider 인터페이스, Anthropic, 오프라인 mock
 ├── pipeline/
 │   ├── pii.py           개인정보 마스킹
@@ -90,7 +104,14 @@ backend/app
 │   └── validate.py      검증 가드
 ├── kb/                  가상 게임 서비스 정책 문서 (영문 + 상담원용 한국어 요약)
 └── data/glossary.json
-frontend/                Next.js 상담원 콘솔 (문의함 · 대화 · 코파일럿 패널 · 작성기)
+frontend/
+├── app/                 / 대시보드 · /console 상담 콘솔 · /kb 지식베이스
+├── components/
+│   ├── AppShell.tsx     1안(상단 필 메뉴) / 2안(아이콘 레일) 레이아웃
+│   ├── ThemeProvider    디자인·테마 상태 (SSR 안전, 명시적 선택만 저장)
+│   ├── charts.tsx       SVG 라인·컬럼·링 차트, 툴팁, 표 보기
+│   └── dashboard/       DashboardA (1안) · DashboardB (2안)
+└── app/globals.css      디자인 토큰 (2 디자인 × 2 모드 CSS 변수)
 ```
 
 ## 데이터

@@ -1,4 +1,4 @@
-import type { Conversation, ConversationListItem, Health, Kpi, Summary, TranslatePreview, Validation } from "./types";
+import type { Conversation, ConversationListItem, Dashboard, Health, Kpi, Summary, TranslatePreview, Validation } from "./types";
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -36,6 +36,9 @@ const post = <T>(path: string, body?: unknown) =>
 export const api = {
   health: () => request<Health>("/api/health"),
   kpi: () => request<Kpi>("/api/kpi"),
+  dashboard: (days = 14) => request<Dashboard>(`/api/dashboard?days=${days}`),
+  kb: () => request<{ id: string; category: string; title: string; section: string; text: string; text_ko: string }[]>("/api/kb"),
+  glossary: () => request<Record<string, string>>("/api/glossary"),
   list: () => request<ConversationListItem[]>("/api/conversations"),
   get: (id: number) => request<Conversation>(`/api/conversations/${id}`),
   create: (body: { channel: string; customer_name: string; customer_email?: string; subject?: string; message: string }) =>

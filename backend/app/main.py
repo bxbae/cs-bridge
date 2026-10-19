@@ -14,7 +14,8 @@ from .db import Base, SessionLocal, engine, get_db
 from .llm.base import LLMError
 from .models import Conversation
 from .pipeline.retrieve import get_retriever
-from .seed import DEMO
+from .dashboard import build_dashboard
+from .seed import DEMO, seed_history
 
 
 @asynccontextmanager
@@ -23,6 +24,9 @@ async def lifespan(app: FastAPI):
     if os.getenv("SEED_DEMO", "1") == "1":
         with SessionLocal() as db:
             if not db.scalar(select(Conversation.id).limit(1)):
+                history = os.getenv("SEED_HISTORY", "auto")
+                if history == "1" or (history == "auto" and service.get_llm().name == "mock"):
+                    seed_history(db, service)
                 for demo in DEMO:
                     service.create_conversation(db, **demo)
     yield
@@ -174,6 +178,17 @@ def set_status(conv_id: int, body: StatusUpdate, db: Session = Depends(get_db)):
 @app.get("/api/kpi")
 def kpi(db: Session = Depends(get_db)):
     return service.kpi(db)
+
+
+@app.get("/api/dashboard")
+def dashboard(days: int = 14, db: Session = Depends(get_db)):
+    return build_dashboard(db, days=max(7, min(days, 60)))
+
+
+@app.get("/api/glossary")
+def glossary():
+    from .pipeline.glossary import load_glossary
+    return load_glossary()
 
 
 @app.get("/api/kb")
