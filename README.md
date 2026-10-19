@@ -1,5 +1,7 @@
 # CS Bridge — 글로벌 CS 상담원 코파일럿
 
+**라이브 데모: https://bxbae.github.io/cs-bridge/** (백엔드 없이 브라우저에서 동작하는 정적 데모)
+
 해외 고객의 **채팅·이메일 문의**를 한국인 상담원이 빠르고 안전하게 처리하도록 돕는 LLM 애플리케이션입니다.
 고객 메시지를 번역·분류하고, 사내 정책(RAG)을 근거로 답변 초안 3개를 만들고, **보내기 전에 규칙 기반 가드로 검증**합니다. 상담이 끝나면 상담 기록을 자동으로 정리합니다.
 
@@ -79,6 +81,16 @@ export LLM_PROVIDER=anthropic ANTHROPIC_API_KEY=sk-ant-...
 Docker: `cp .env.example .env && docker compose up --build`
 
 첫 실행 시 데모 데이터가 생성됩니다: 오늘 문의 4건 + 대시보드용 지난 13일 이력(평가 문항을 실제 파이프라인에 통과시킨 뒤 날짜만 과거로 조정, 상담원 동작은 시뮬레이션). 이력 생성은 mock 모드에서만 기본 실행되며(`SEED_HISTORY=auto`), 실제 LLM에서도 만들려면 `SEED_HISTORY=1`.
+
+### 정적 데모 (GitHub Pages)
+
+`main`에 push하면 `.github/workflows/pages.yml`이 자동 배포합니다.
+
+1. `backend/scripts/export_demo.py`가 실제 백엔드(mock)를 돌려 대화·대시보드·지식베이스와 프리셋 문의 분석 결과를 `frontend/public/demo/snapshot.json`으로 내보냅니다.
+2. 브라우저에서는 `lib/demo/demoApi.ts`가 API 대신 이 스냅샷을 씁니다. 검증 가드는 TypeScript로 옮겼고, `npm run demo:parity`가 Python과 결과가 **완전히 같은지** 131개 케이스로 확인합니다(배포 전 필수 단계).
+3. `npm run build:demo`로 `/cs-bridge` 경로용 정적 파일을 만듭니다.
+
+로컬에서 확인: `cd backend && python -m scripts.export_demo && cd ../frontend && npm run demo:parity && npm run build:demo` 후 `out/`을 `/cs-bridge/` 경로로 서빙.
 
 테스트: `cd backend && pytest -q` (26개)
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { api } from "@/lib/api";
+import { demoSnapshotDate } from "@/lib/demo/demoApi";
 import type { Health } from "@/lib/types";
 import { IconBell, IconBook, IconChat, IconDashboard, IconPower, IconSearch } from "./icons";
 import { ThemeToggle } from "./ThemeToggle";
@@ -18,8 +19,31 @@ function isActive(path: string, href: string) {
   return href === "/" ? path === "/" : path.startsWith(href);
 }
 
+const DEMO = process.env.NEXT_PUBLIC_DEMO === "1";
+
+function DemoBanner() {
+  const [date, setDate] = useState<string | null>(null);
+  const [open, setOpen] = useState(true);
+  useEffect(() => {
+    demoSnapshotDate().then((d) => setDate(new Date(d).toLocaleDateString("ko-KR"))).catch(() => setDate(null));
+  }, []);
+  if (!open) return null;
+  return (
+    <div className="mx-8 mb-2 flex items-center gap-3 rounded-2xl bg-accent-50 px-4 py-2 text-xs text-ink-700">
+      <span className="chip bg-accent text-white">정적 데모</span>
+      <span className="min-w-0 flex-1">
+        백엔드 없이 브라우저에서 동작합니다. 번역 미리보기·검증 가드·상담 기록은 실제로 동작하고, 새 문의는 프리셋만 접수됩니다. 새로고침하면 초기화됩니다.
+        {date && <span className="text-ink-500"> · 데이터 스냅샷 {date}</span>}
+      </span>
+      <a href="https://github.com/bxbae/cs-bridge" target="_blank" rel="noreferrer" className="shrink-0 font-semibold text-brand-600 hover:underline">GitHub</a>
+      <button onClick={() => setOpen(false)} aria-label="안내 닫기" className="shrink-0 text-ink-500 hover:text-ink-900">✕</button>
+    </div>
+  );
+}
+
 function ProviderBadge({ health }: { health: Health | null }) {
   if (!health) return null;
+  if (health.llm_provider === "demo") return null; // the demo banner explains it
   const mock = health.llm_provider === "mock";
   return (
     <span
@@ -92,6 +116,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </div>
             </div>
           </header>
+          {DEMO && <DemoBanner />}
           <main className="min-h-0 flex-1 overflow-y-auto">{children}</main>
         </div>
       </div>

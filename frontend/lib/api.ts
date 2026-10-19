@@ -1,12 +1,10 @@
+import { ApiError } from "./apiError";
+import { demoApi } from "./demo/demoApi";
 import type { Conversation, ConversationListItem, Dashboard, Health, Kpi, Summary, TranslatePreview, Validation } from "./types";
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
-export class ApiError extends Error {
-  constructor(message: string, public status: number, public validation?: Validation) {
-    super(message);
-  }
-}
+export { ApiError };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
@@ -33,7 +31,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 const post = <T>(path: string, body?: unknown) =>
   request<T>(path, { method: "POST", body: body === undefined ? undefined : JSON.stringify(body) });
 
-export const api = {
+const realApi = {
   health: () => request<Health>("/api/health"),
   kpi: () => request<Kpi>("/api/kpi"),
   dashboard: (days = 14) => request<Dashboard>(`/api/dashboard?days=${days}`),
@@ -51,3 +49,8 @@ export const api = {
   summary: (id: number) => post<Summary>(`/api/conversations/${id}/summary`),
   setStatus: (id: number, status: string) => post<ConversationListItem>(`/api/conversations/${id}/status`, { status }),
 };
+
+export type Api = typeof realApi;
+
+/** Static demo build (GitHub Pages): same interface, served from a snapshot in the browser. */
+export const api: Api = process.env.NEXT_PUBLIC_DEMO === "1" ? demoApi : realApi;
