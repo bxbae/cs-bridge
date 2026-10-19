@@ -10,7 +10,7 @@ APP_DIR = Path(__file__).resolve().parent
 class Settings:
     # "anthropic" uses the real LLM; "mock" runs fully offline for dev, tests and CI.
     llm_provider: str = os.getenv("LLM_PROVIDER", "mock")
-    anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "")
+    anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "").strip()
     anthropic_model: str = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-5-5")
     database_url: str = os.getenv("DATABASE_URL", f"sqlite:///{APP_DIR.parent / 'cs_bridge.db'}")
     kb_dir: Path = Path(os.getenv("KB_DIR", str(APP_DIR / "kb")))
