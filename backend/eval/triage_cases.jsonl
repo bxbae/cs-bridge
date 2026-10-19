@@ -1,0 +1,30 @@
+{"message": "I bought the 1200 Crystals pack but it never arrived in my mailbox.", "category": "billing", "expected_chunk": "KB-PAY-01#1"}
+{"message": "Paid for gems 30 minutes ago, still nothing. Restarted already.", "category": "billing", "expected_chunk": "KB-PAY-01#1"}
+{"message": "Purchase went through on Google Play but no items in game", "category": "billing", "expected_chunk": "KB-PAY-01#1"}
+{"message": "Restore purchases button does nothing, my pack is still missing", "category": "billing", "expected_chunk": "KB-PAY-01#2"}
+{"message": "I got charged twice for the starter pack!!", "category": "billing", "expected_chunk": "KB-PAY-01#3"}
+{"message": "There are two identical payments on my bank statement for one pack", "category": "billing", "expected_chunk": "KB-PAY-01#3"}
+{"message": "Can I get my money back for the crystal pack I bought yesterday? I haven't used any.", "category": "refund", "expected_chunk": "KB-REF-01#1"}
+{"message": "I want a refund for the 500 crystal pack, bought it 2 days ago", "category": "refund", "expected_chunk": "KB-REF-01#1"}
+{"message": "Please refund my Season Pass, I activated it by accident", "category": "refund", "expected_chunk": "KB-REF-01#2"}
+{"message": "Is the season pass refundable if I haven't activated it yet?", "category": "refund", "expected_chunk": "KB-REF-01#2"}
+{"message": "Why was my account suspended? I did nothing wrong", "category": "account", "expected_chunk": "KB-ACC-01#1"}
+{"message": "I got banned for cheating but I never used any hacks", "category": "account", "expected_chunk": "KB-ACC-01#1"}
+{"message": "How do I appeal my ban? It says it ends next month", "category": "account", "expected_chunk": "KB-ACC-01#2"}
+{"message": "Someone logged into my account and spent my crystals, I think I was hacked", "category": "account", "expected_chunk": "KB-ACC-01#3"}
+{"message": "My account was stolen, the password doesn't work anymore", "category": "account", "expected_chunk": "KB-ACC-01#3"}
+{"message": "I can't log in, it shows error 1002", "category": "technical", "expected_chunk": "KB-LOG-01#1"}
+{"message": "Login screen is stuck forever after the update", "category": "technical", "expected_chunk": "KB-LOG-01#1"}
+{"message": "I keep getting disconnected in the middle of raids", "category": "technical", "expected_chunk": "KB-LOG-01#2"}
+{"message": "Game kicks me out every 5 minutes on wifi", "category": "technical", "expected_chunk": "KB-LOG-01#2"}
+{"message": "When is the maintenance this week?", "category": "maintenance", "expected_chunk": "KB-PAT-01#2"}
+{"message": "Maintenance was extended again, are we getting compensation?", "category": "maintenance", "expected_chunk": "KB-PAT-01#3"}
+{"message": "The downtime lasted 3 extra hours, will there be rewards?", "category": "maintenance", "expected_chunk": "KB-PAT-01#3"}
+{"message": "What's new in patch 2.4? Is the level cap higher?", "category": "maintenance", "expected_chunk": "KB-PAT-01#1"}
+{"message": "My Season Pass rewards don't show up in the mailbox", "category": "bug", "expected_chunk": "KB-PAT-01#1"}
+{"message": "My legendary sword vanished after I logged back in", "category": "bug", "expected_chunk": "KB-BUG-01#2"}
+{"message": "I lost 3 items after the server crash yesterday, can you restore them?", "category": "bug", "expected_chunk": "KB-BUG-01#2"}
+{"message": "Found a bug: the guild chat button is broken. How do I report it?", "category": "bug", "expected_chunk": "KB-BUG-01#1"}
+{"message": "The quest NPC is glitched and I can't finish the story", "category": "bug", "expected_chunk": "KB-BUG-01#1"}
+{"message": "Do you have a Discord server for the community?", "category": "other", "expected_chunk": null}
+{"message": "Can you recommend a good build for a mage?", "category": "other", "expected_chunk": null}

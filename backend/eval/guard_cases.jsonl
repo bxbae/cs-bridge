@@ -1,0 +1,12 @@
+{"reply": "We will send 300 Crystals to your mailbox if you log in within 7 days.", "channel": "chat", "source_query": "maintenance extended compensation", "source_ko": null, "expected": "pass"}
+{"reply": "We will send 1000 Crystals to everyone as compensation.", "channel": "chat", "source_query": "maintenance extended compensation", "source_ko": null, "expected": "block"}
+{"reply": "Don't worry, we will refund your Season Pass right away.", "channel": "chat", "source_query": "refund season pass", "source_ko": null, "expected": "warn"}
+{"reply": "You'll receive a full refund within 2 days.", "channel": "chat", "source_query": "refund crystal pack", "source_ko": null, "expected": "block"}
+{"reply": "We have restored your sword.", "channel": "chat", "source_query": "items lost bug", "source_ko": null, "expected": "warn"}
+{"reply": "We will lift your suspension today.", "channel": "chat", "source_query": "account banned appeal", "source_ko": null, "expected": "block"}
+{"reply": "Please send your receipt ID and we'll deliver the items within 24 hours.", "channel": "chat", "source_query": "purchased crystals not received", "source_ko": null, "expected": "pass"}
+{"reply": "We will deliver the items within 1 hour.", "channel": "chat", "source_query": "purchased crystals not received", "source_ko": null, "expected": "block"}
+{"reply": "Please reply to sam.r@gmail.com with your details.", "channel": "chat", "source_query": "bug report", "source_ko": null, "expected": "block"}
+{"reply": "Please check your mailbox in 10 minutes.", "channel": "chat", "source_query": "purchased crystals not received", "source_ko": "10분 뒤에 우편함을 확인해 주세요.", "expected": "pass"}
+{"reply": "Please check your mailbox in 30 minutes.", "channel": "chat", "source_query": "purchased crystals not received", "source_ko": "10분 뒤에 우편함을 확인해 주세요.", "expected": "block"}
+{"reply": "The appeal review takes 3 business days.", "channel": "chat", "source_query": "account appeal", "source_ko": "이의 신청 검토는 영업일 기준 3일 걸립니다.", "expected": "pass"}

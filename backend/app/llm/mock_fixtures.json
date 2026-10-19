@@ -1,0 +1,25 @@
+{
+  "analyze": {
+    "Hi, I bought the 500 Crystals pack about an hour ago but nothing showed up in my mailbox. I already restarted the game twice. Can you help?": {
+      "translation_ko": "안녕하세요, 한 시간쯤 전에 크리스탈 500개 패키지를 샀는데 우편함에 아무것도 안 들어왔어요. 게임은 이미 두 번 재시작했습니다. 도와주실 수 있나요?",
+      "intent_ko": "구매한 크리스탈 500개가 지급되지 않아 지급을 요청"
+    },
+    "Hello, I bought the Season Pass yesterday by mistake and activated it before I realized. I would like a refund please. You can reach me at [EMAIL].": {
+      "translation_ko": "안녕하세요, 어제 실수로 시즌 패스를 구매했고 알아차리기 전에 활성화해 버렸습니다. 환불받고 싶습니다. 연락은 [EMAIL]로 주세요.",
+      "intent_ko": "활성화한 시즌 패스의 환불 요청"
+    },
+    "This is ridiculous!! My account got banned for no reason. I have played for 3 years and never cheated. Unban me NOW.": {
+      "translation_ko": "이건 말도 안 돼요!! 아무 이유 없이 계정이 정지됐어요. 3년 동안 플레이하면서 한 번도 핵을 쓴 적이 없어요. 지금 당장 정지 풀어주세요.",
+      "intent_ko": "부당한 계정 정지라며 즉시 해제를 요구"
+    },
+    "Hi team, the maintenance on Wednesday was extended by 2 hours and I missed the Guild Raid event. Will there be any compensation?": {
+      "translation_ko": "안녕하세요, 수요일 점검이 2시간 연장되어 길드 레이드 이벤트를 놓쳤습니다. 보상이 있을까요?",
+      "intent_ko": "점검 연장에 따른 보상 여부 문의"
+    }
+  },
+  "translate": {
+    "불편을 드려 죄송합니다. 설정 > 계정에서 구매 복원을 눌러 주시겠어요? 그래도 지급되지 않으면 주문 번호와 서버명, 캐릭터명을 알려 주세요. 확인 후 24시간 안에 지급해 드리겠습니다.": "Sorry for the inconvenience. Could you tap Restore Purchases in Settings > Account? If the items still don't arrive, please share your Order ID, server name and character name. Once verified, we'll deliver them within 24 hours.",
+    "점검 연장으로 불편을 드려 죄송합니다. 공식 공지된 연장의 경우 7일 안에 접속하시면 우편함으로 크리스탈 300개가 지급됩니다.": "We're sorry for the inconvenience caused by the extended maintenance. For extensions announced on the official notice board, you'll receive 300 Crystals in your mailbox if you log in within 7 days.",
+    "점검 보상으로 크리스탈 500개를 바로 보내드리겠습니다.": "We will send you 500 Crystals right away as maintenance compensation."
+  }
+}

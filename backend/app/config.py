@@ -1,0 +1,24 @@
+"""Runtime settings, read from environment variables."""
+import os
+from dataclasses import dataclass
+from pathlib import Path
+
+APP_DIR = Path(__file__).resolve().parent
+
+
+@dataclass(frozen=True)
+class Settings:
+    # "anthropic" uses the real LLM; "mock" runs fully offline for dev, tests and CI.
+    llm_provider: str = os.getenv("LLM_PROVIDER", "mock")
+    anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "")
+    anthropic_model: str = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-5-5")
+    database_url: str = os.getenv("DATABASE_URL", f"sqlite:///{APP_DIR.parent / 'cs_bridge.db'}")
+    kb_dir: Path = Path(os.getenv("KB_DIR", str(APP_DIR / "kb")))
+    glossary_path: Path = Path(os.getenv("GLOSSARY_PATH", str(APP_DIR / "data" / "glossary.json")))
+    agent_name: str = os.getenv("AGENT_NAME", "Eric")
+    brand_name: str = os.getenv("BRAND_NAME", "Starfall Odyssey Support")
+    top_k: int = int(os.getenv("RETRIEVAL_TOP_K", "3"))
+    cors_origins: str = os.getenv("CORS_ORIGINS", "http://localhost:3000")
+
+
+settings = Settings()
