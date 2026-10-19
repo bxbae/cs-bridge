@@ -6,7 +6,7 @@ export function SummaryCard({ s, onClose }: { s: Summary; onClose: () => void })
     <div className="mx-6 mt-4 rounded-xl border border-brand-100 bg-brand-50 p-4 text-sm">
       <div className="mb-2 flex items-center gap-2">
         <span className="panel-title text-brand-700">상담 기록</span>
-        <span className="chip bg-white text-brand-700">{CATEGORY_KO[s.category] ?? s.category}</span>
+        <span className="chip bg-surface text-brand-700">{CATEGORY_KO[s.category] ?? s.category}</span>
         <span className={`chip ${s.resolved ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}>
           {s.resolved ? "해결" : "미해결"}
         </span>
@@ -32,7 +32,7 @@ export function SummaryCard({ s, onClose }: { s: Summary; onClose: () => void })
           </>
         )}
         <dt className="text-ink-500">태그</dt>
-        <dd className="flex flex-wrap gap-1">{s.tags.map((t) => <span key={t} className="chip bg-white text-ink-700">#{t}</span>)}</dd>
+        <dd className="flex flex-wrap gap-1">{s.tags.map((t) => <span key={t} className="chip bg-surface text-ink-700">#{t}</span>)}</dd>
       </dl>
     </div>
   );

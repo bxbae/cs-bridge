@@ -98,7 +98,7 @@ export function Composer({
   const blocked = !!validation && !validation.passed && !stale;
 
   return (
-    <div className="shrink-0 border-t border-ink-100 bg-white px-6 py-4">
+    <div className="shrink-0 border-t border-ink-100 bg-surface px-6 py-4">
       <div className="grid gap-3 lg:grid-cols-2">
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">

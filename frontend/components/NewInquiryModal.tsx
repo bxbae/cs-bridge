@@ -43,8 +43,8 @@ export function NewInquiryModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-900/40 p-4" onClick={onClose}>
-      <div className="w-full max-w-lg rounded-2xl bg-white p-5 shadow-xl" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+      <div className="w-full max-w-lg rounded-2xl bg-surface p-5 shadow-xl" onClick={(e) => e.stopPropagation()}>
         <div className="mb-1 flex items-center justify-between">
           <h2 className="text-base font-semibold">새 문의 (고객 시뮬레이션)</h2>
           <button className="btn-quiet px-2 py-1" onClick={onClose} aria-label="닫기">✕</button>
@@ -55,7 +55,7 @@ export function NewInquiryModal({
           {PRESETS.map((p) => (
             <button
               key={p.label}
-              className="chip border border-ink-300 bg-white py-1 text-ink-700 hover:bg-ink-100"
+              className="chip border border-ink-300 bg-surface py-1 text-ink-700 hover:bg-ink-100"
               onClick={() => {
                 setChannel(p.channel);
                 setName(p.name);
@@ -72,7 +72,7 @@ export function NewInquiryModal({
         <div className="space-y-2.5">
           <div className="flex rounded-lg bg-ink-100 p-0.5 text-xs">
             {(["chat", "email"] as Channel[]).map((c) => (
-              <button key={c} onClick={() => setChannel(c)} className={`flex-1 rounded-md py-1.5 font-medium ${channel === c ? "bg-white shadow-sm" : "text-ink-500"}`}>
+              <button key={c} onClick={() => setChannel(c)} className={`flex-1 rounded-md py-1.5 font-medium ${channel === c ? "bg-surface shadow-sm" : "text-ink-500"}`}>
                 {c === "chat" ? "채팅" : "이메일"}
               </button>
             ))}

@@ -15,7 +15,7 @@ function Bubble({ m, channel, showOriginal }: { m: Message; channel: string; sho
         <div
           className={`whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
             isCustomer
-              ? "rounded-tl-sm border border-ink-100 bg-white"
+              ? "rounded-tl-sm border border-ink-100 bg-surface"
               : "rounded-tr-sm bg-brand-600 text-white"
           } ${channel === "email" ? "font-[450]" : ""}`}
         >

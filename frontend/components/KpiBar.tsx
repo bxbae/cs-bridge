@@ -1,4 +1,5 @@
 import type { Health, Kpi } from "@/lib/types";
+import { ThemeToggle } from "./ThemeToggle";
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
@@ -12,7 +13,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 export function KpiBar({ kpi, health }: { kpi: Kpi | null; health: Health | null }) {
   const pct = (n: number | null | undefined) => (n == null ? "–" : `${Math.round(n * 100)}%`);
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-ink-100 bg-white px-5">
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-ink-100 bg-surface px-5">
       <div className="flex items-center gap-3">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">CB</div>
         <div className="leading-tight">
@@ -31,6 +32,7 @@ export function KpiBar({ kpi, health }: { kpi: Kpi | null; health: Health | null
         <Stat label="평균 수정률" value={pct(kpi?.avg_edit_ratio)} />
         <Stat label="첫 초안까지" value={kpi?.avg_first_draft_ms == null ? "–" : `${(kpi.avg_first_draft_ms / 1000).toFixed(1)}초`} />
         <Stat label="가드 차단 초안" value={`${kpi?.drafts_blocked_by_guard ?? 0} / ${kpi?.drafts_generated ?? 0}`} />
+        <ThemeToggle />
       </div>
     </header>
   );

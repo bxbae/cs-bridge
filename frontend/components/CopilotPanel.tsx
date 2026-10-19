@@ -18,7 +18,7 @@ function DraftCard({
 }) {
   const [showKo, setShowKo] = useState(false);
   return (
-    <div className="rounded-xl border border-ink-100 bg-white p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+    <div className="rounded-xl border border-ink-100 bg-surface p-3 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
       <div className="mb-2 flex items-center gap-2">
         <span className="text-xs font-semibold">{STYLE_KO[draft.style]}</span>
         <ValidationBadge v={draft.validation} />
@@ -56,7 +56,7 @@ function DraftCard({
 function SourceItem({ s }: { s: Source }) {
   const [open, setOpen] = useState(false);
   return (
-    <li className="rounded-lg border border-ink-100 bg-white p-2.5">
+    <li className="rounded-lg border border-ink-100 bg-surface p-2.5">
       <div className="flex items-center gap-2">
         <span className="font-mono text-[10px] text-ink-500">{s.id}</span>
         <span className="truncate text-xs font-medium">{s.section}</span>
@@ -94,7 +94,7 @@ export function CopilotPanel({
       {cls && (
         <section>
           <h3 className="panel-title mb-2">문의 분석</h3>
-          <div className="rounded-xl border border-ink-100 bg-white p-3">
+          <div className="rounded-xl border border-ink-100 bg-surface p-3">
             <p className="text-sm font-medium leading-snug">{cls.intent_ko}</p>
             <div className="mt-2 flex flex-wrap gap-1">
               <span className="chip bg-brand-50 text-brand-700">{CATEGORY_KO[cls.category]}</span>
@@ -135,7 +135,7 @@ export function CopilotPanel({
             {!drafts.length && <p className="text-xs text-ink-500">표시할 초안이 없습니다. 한국어로 직접 작성하세요.</p>}
           </div>
         ) : (
-          <p className="rounded-lg bg-white p-3 text-xs text-ink-500">고객의 새 메시지가 오면 초안이 생성됩니다.</p>
+          <p className="rounded-lg bg-surface p-3 text-xs text-ink-500">고객의 새 메시지가 오면 초안이 생성됩니다.</p>
         )}
       </section>
 

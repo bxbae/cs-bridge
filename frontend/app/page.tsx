@@ -75,7 +75,7 @@ export default function ConsolePage() {
         {conv ? (
           <>
             <main className="flex min-w-0 flex-1 flex-col">
-              <div className="flex shrink-0 items-center gap-3 border-b border-ink-100 bg-white px-6 py-3">
+              <div className="flex shrink-0 items-center gap-3 border-b border-ink-100 bg-surface px-6 py-3">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
                     <h1 className="truncate text-base font-semibold">{conv.customer_name}</h1>
