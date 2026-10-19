@@ -8,8 +8,8 @@ import { ChartWithTable, Legend, RingMeter } from "../charts";
 import { IconArrowIn, IconArrowOut, IconBolt, IconChevronRight, IconClock, IconDownload, IconInbox } from "../icons";
 import { DemoNote, exportCsv, InquiryTable, InquiryTrend, Loading, useDashboard } from "./shared";
 
-/** 2안 — white main column + lavender side panel, indigo/coral accents (finance reference). */
-export function DashboardB() {
+/** White main column (trend + recent activity) and a lavender side panel (briefing + summary). */
+export function Dashboard() {
   const [days, setDays] = useState(14);
   const { data: d, error } = useDashboard(days);
   if (!d) return <Loading error={error} />;

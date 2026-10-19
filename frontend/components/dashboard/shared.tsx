@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { CATEGORY_KO, greeting, shortDate } from "@/lib/labels";
+import { shortDate } from "@/lib/labels";
 import type { Dashboard } from "@/lib/types";
 import { LineChart, TableView, type Series } from "../charts";
 
@@ -17,13 +17,6 @@ export function useDashboard(days: number) {
     return () => { alive = false; };
   }, [days]);
   return { data, error };
-}
-
-/** Greeting depends on the viewer's clock, so render it after mount (no hydration mismatch). */
-export function useGreeting(name: string) {
-  const [text, setText] = useState("");
-  useEffect(() => setText(greeting(name)), [name]);
-  return text;
 }
 
 export function exportCsv(d: Dashboard) {
@@ -61,19 +54,6 @@ export function InquiryTable({ d }: { d: Dashboard }) {
       columns={["날짜", "채팅", "이메일", "답변", "초안 채택"]}
       rows={[...d.daily].reverse().map((r) => [r.date, r.chat, r.email, r.replies, r.adoption_rate == null ? "–" : `${Math.round(r.adoption_rate * 100)}%`])}
     />
-  );
-}
-
-export function categoryItems(d: Dashboard) {
-  return Object.entries(d.by_category).map(([k, v]) => ({ label: (CATEGORY_KO[k] ?? k).split("·")[0], value: v }));
-}
-
-export function Initials({ name, tone = "brand" }: { name: string; tone?: "brand" | "accent" }) {
-  const letters = name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
-  return (
-    <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${tone === "brand" ? "bg-brand-50 text-brand-700" : "bg-accent-50 text-ink-900"}`}>
-      {letters}
-    </span>
   );
 }
 

@@ -209,84 +209,6 @@ export function LineChart({
   );
 }
 
-/* ---------- column chart ---------- */
-
-export function ColumnChart({
-  items,
-  height = 220,
-  refValue,
-  refLabel,
-  format = (v) => String(v),
-  unit = "",
-}: {
-  items: { label: string; value: number }[];
-  height?: number;
-  refValue?: number;
-  refLabel?: string;
-  format?: (v: number) => string;
-  unit?: string;
-}) {
-  const [ref, width] = useWidth<HTMLDivElement>();
-  const [hover, setHover] = useState<number | null>(null);
-  const pad = { l: 30, r: 8, t: 22, b: 26 };
-  const iw = Math.max(0, width - pad.l - pad.r);
-  const ih = height - pad.t - pad.b;
-  const max = niceMax(Math.max(1, ...items.map((i) => i.value), refValue ?? 0));
-  const band = items.length ? iw / items.length : 0;
-  const bw = Math.min(24, band * 0.5);
-  const y = (v: number) => pad.t + ih - (v / max) * ih;
-  const top = items.reduce((best, it, i) => (it.value > items[best].value ? i : best), 0);
-
-  // Column with 4px rounded data-end, square at the baseline.
-  const colPath = (cx: number, v: number) => {
-    const h = Math.max(0, pad.t + ih - y(v));
-    const r = Math.min(4, h, bw / 2);
-    const x0 = cx - bw / 2, x1 = cx + bw / 2, yb = pad.t + ih, yt = yb - h;
-    return `M${x0},${yb} V${yt + r} Q${x0},${yt} ${x0 + r},${yt} H${x1 - r} Q${x1},${yt} ${x1},${yt + r} V${yb} Z`;
-  };
-
-  return (
-    <div ref={ref} className="relative w-full" style={{ height }}>
-      {width > 0 && (
-        <svg width={width} height={height} role="img" aria-label="카테고리별 문의 수">
-          {[0, max / 2, max].map((t) => (
-            <g key={t}>
-              <line x1={pad.l} x2={width - pad.r} y1={y(t)} y2={y(t)} stroke={col("ink-100")} strokeWidth={1} />
-              <text x={pad.l - 8} y={y(t)} dy="0.32em" textAnchor="end" fontSize={11} fill={col("ink-500")}>{format(t)}</text>
-            </g>
-          ))}
-          {refValue != null && (
-            <g>
-              <line x1={pad.l} x2={width - pad.r} y1={y(refValue)} y2={y(refValue)} stroke={col("brand-600", 0.7)} strokeWidth={1} />
-              <circle cx={pad.l} cy={y(refValue)} r={3.5} fill={col("brand-600")} stroke={col("surface")} strokeWidth={2} />
-              {refLabel && <text x={width - pad.r} y={y(refValue) - 6} textAnchor="end" fontSize={10} fill={col("ink-500")}>{refLabel}</text>}
-            </g>
-          )}
-          {items.map((it, i) => {
-            const cx = pad.l + band * (i + 0.5);
-            const emphasized = i === top || i === hover;
-            return (
-              <g key={it.label} onPointerEnter={() => setHover(i)} onPointerLeave={() => setHover(null)}>
-                <rect x={pad.l + band * i} y={pad.t} width={band} height={ih} fill="transparent" />
-                <path d={colPath(cx, it.value)} fill={emphasized ? col("chart-1") : col("chart-1", 0.28)} />
-                {i === top && <text x={cx} y={y(it.value) - 7} textAnchor="middle" fontSize={11} fontWeight={600} fill={col("ink-900")}>{format(it.value)}</text>}
-                <text x={cx} y={height - 8} textAnchor="middle" fontSize={11} fill={col("ink-500")}>{it.label}</text>
-              </g>
-            );
-          })}
-        </svg>
-      )}
-      {hover != null && width > 0 && (
-        <div className="pointer-events-none absolute z-10 rounded-xl bg-ink-900 px-3 py-2 text-xs text-surface shadow-lg"
-          style={{ left: Math.min(Math.max(pad.l + band * (hover + 0.5) + 14, 0), width - 120), top: Math.max(0, y(items[hover].value) - 10) }}>
-          <div className="font-medium opacity-80">{items[hover].label}</div>
-          <div className="font-semibold tabular-nums">{format(items[hover].value)}{unit}</div>
-        </div>
-      )}
-    </div>
-  );
-}
-
 /* ---------- ring meter (one rate, not a part-to-whole comparison) ---------- */
 
 export function RingMeter({ value, color = "chart-1", size = 56, children }: { value: number | null; color?: string; size?: number; children?: ReactNode }) {
@@ -301,16 +223,6 @@ export function RingMeter({ value, color = "chart-1", size = 56, children }: { v
           strokeDasharray={`${c * v} ${c}`} transform={`rotate(-90 ${size / 2} ${size / 2})`} />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center text-ink-900">{children}</div>
-    </div>
-  );
-}
-
-/* ---------- progress meter ---------- */
-
-export function Meter({ value, color = "brand-600" }: { value: number; color?: string }) {
-  return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full" style={{ background: col(color, 0.14) }}>
-      <div className="h-full rounded-full" style={{ width: `${Math.max(0, Math.min(1, value)) * 100}%`, background: col(color) }} />
     </div>
   );
 }
