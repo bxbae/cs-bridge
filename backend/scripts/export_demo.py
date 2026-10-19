@@ -92,6 +92,9 @@ def main():
         ("Please wait 3 days for the review.", "chat", "ban appeal", "이의 신청 결과는 영업일 3일, 최대 5일 안에 드립니다."),
         ("Card 4111 1111 1111 1111 and order GPA.3381-2210-4467-12345, call +1 415-555-0132", "chat", "purchase missing", None),
         ("x" * 720, "chat", "login error", None),
+        ("Please reset your password, enable two-step verification, then submit an appeal.", "chat", "hacked account", "비밀번호를 재설정하고 2단계 인증을 켠 다음 이의 신청해 주세요."),
+        ("The review takes three business days, at most five.", "chat", "ban appeal", "검토는 영업일 3일, 최대 5일 걸립니다."),
+        ("The review takes a few days.", "chat", "ban appeal", "검토는 영업일 3일 걸립니다."),
     ]
     for reply, ch, q, ko in extra:
         cases.append({"reply": reply, "channel": ch, "sources": retriever.search(q, top_k=3), "cited_ids": None, "source_ko": ko})

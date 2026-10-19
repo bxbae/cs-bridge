@@ -1,0 +1,10 @@
+{"text_ko": "불편을 드려 죄송합니다. 설정 > 계정에서 구매 복원을 눌러 주세요. 그래도 안 되면 주문 번호를 알려 주세요.", "channel": "chat", "source_query": "purchased crystals not received restore"}
+{"text_ko": "점검 연장 보상으로 7일 안에 접속하시면 우편함으로 크리스탈 300개가 지급됩니다.", "channel": "email", "source_query": "maintenance extended compensation"}
+{"text_ko": "시즌 패스는 활성화 후에는 환불이 어렵습니다. 활성화 전이라면 구매 후 7일 이내 환불 가능합니다.", "channel": "email", "source_query": "refund season pass"}
+{"text_ko": "이의 신청은 보안팀이 영업일 기준 3일 안에 검토합니다.", "channel": "chat", "source_query": "account suspension appeal"}
+{"text_ko": "오류 코드 1002는 구버전 클라이언트라서 발생합니다. 최신 버전으로 업데이트해 주세요.", "channel": "chat", "source_query": "login error 1002"}
+{"text_ko": "이중 결제된 금액은 확인 후 3~5 영업일 안에 원래 스토어로 환불됩니다.", "channel": "email", "source_query": "charged twice duplicate payment"}
+{"text_ko": "2.4 패치로 캐릭터 최대 레벨이 80에서 85로 올랐고 길드 레이드가 추가되었습니다.", "channel": "chat", "source_query": "patch 2.4 level cap"}
+{"text_ko": "해킹이 의심되면 비밀번호를 재설정하고 2단계 인증을 켠 다음 이의 신청해 주세요.", "channel": "chat", "source_query": "hacked account"}
+{"text_ko": "사라진 아이템은 개발팀이 서버 로그로 버그를 확인한 뒤 영업일 5일 이내에 복구됩니다.", "channel": "email", "source_query": "items lost bug restore"}
+{"text_ko": "정기 점검은 매주 수요일 02:00~06:00 UTC에 진행됩니다.", "channel": "chat", "source_query": "maintenance schedule"}

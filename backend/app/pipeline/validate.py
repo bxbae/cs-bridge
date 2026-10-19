@@ -5,7 +5,7 @@ The LLM writes; these checks decide whether the result is safe to send. Each fin
 """
 import re
 
-from .glossary import missing_terms
+from .glossary import load_glossary, missing_terms, terms_in
 from .pii import find_pii
 from .retrieve import get_retriever
 
@@ -25,8 +25,25 @@ def _sentences(text: str) -> list[str]:
     return [s.strip() for s in re.split(r"(?<=[.!?])\s+|\n+", text) if s.strip()]
 
 
+NUMBER_WORDS = {w: str(i) for i, w in enumerate(
+    "zero one two three four five six seven eight nine ten eleven twelve".split())}
+NUMBER_WORD = re.compile(r"\b(" + "|".join(NUMBER_WORDS) + r")\b", re.I)
+
+
 def numbers_in(text: str) -> set[str]:
     return {n.replace(",", "") for n in NUMBER.findall(text)}
+
+
+def translated_numbers(text: str) -> set[str]:
+    """Digits plus English number words, so "two-step" counts as 2."""
+    return numbers_in(text) | {NUMBER_WORDS[w.lower()] for w in NUMBER_WORD.findall(text)}
+
+
+def source_numbers_ko(text_ko: str) -> set[str]:
+    """Digits the translation must keep: those inside glossary terms (2단계 인증) are not quantities."""
+    for ko, _ in terms_in(text_ko, load_glossary()).items():
+        text_ko = text_ko.replace(ko, " ")
+    return numbers_in(text_ko)
 
 
 def check_reply(
@@ -109,7 +126,7 @@ def check_reply(
 
     # 5. Translation fidelity: numbers and official terms must survive translation.
     if source_ko is not None:
-        lost = numbers_in(source_ko) - numbers_in(reply)
+        lost = source_numbers_ko(source_ko) - translated_numbers(reply)
         if lost:
             findings.append({"code": "number_mismatch", "level": "error", "message": f"번역문에서 숫자가 빠지거나 바뀌었습니다: {', '.join(sorted(lost))}"})
         for term in missing_terms(source_ko, reply):

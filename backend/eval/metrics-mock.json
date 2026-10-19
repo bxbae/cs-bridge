@@ -1,0 +1,41 @@
+{
+  "provider": "mock",
+  "model": null,
+  "effort": null,
+  "triage_cases": 30,
+  "category_accuracy": 0.8,
+  "retrieval_hit@1": 0.714,
+  "retrieval_hit@3": 0.929,
+  "retrieval_doc_hit@3": 0.964,
+  "drafts_generated": 90,
+  "draft_guard_pass_rate": 1.0,
+  "cases_with_a_safe_draft": 1.0,
+  "draft_risk_findings": {},
+  "translation_cases": 10,
+  "translation_guard_pass_rate": 1.0,
+  "translation_numbers_preserved": 1.0,
+  "translation_glossary_compliance": 1.0,
+  "guard_cases": 12,
+  "guard_accuracy": 1.0,
+  "guard_block_recall": 1.0,
+  "latency_ms": {
+    "analyze": {
+      "p50": 0.1,
+      "p95": 0.1
+    },
+    "retrieve": {
+      "p50": 0.1,
+      "p95": 0.1
+    },
+    "drafts": {
+      "p50": 1.1,
+      "p95": 2.7
+    },
+    "translate": {
+      "p50": 0.1,
+      "p95": 0.5
+    }
+  },
+  "first_draft_ms_p50": 1.2,
+  "llm_errors": 0
+}

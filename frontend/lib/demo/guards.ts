@@ -82,6 +82,25 @@ function numbersIn(text: string): Set<string> {
   return new Set([...text.matchAll(NUMBER)].map((m) => m[0].replace(/,/g, "")));
 }
 
+const NUMBER_WORDS: Record<string, string> = Object.fromEntries(
+  "zero one two three four five six seven eight nine ten eleven twelve".split(" ").map((w, i) => [w, String(i)]),
+);
+const NUMBER_WORD = new RegExp(`\\b(${Object.keys(NUMBER_WORDS).join("|")})\\b`, "gi");
+
+/** Digits plus English number words, so "two-step" counts as 2. */
+function translatedNumbers(text: string): Set<string> {
+  const out = numbersIn(text);
+  for (const m of text.matchAll(NUMBER_WORD)) out.add(NUMBER_WORDS[m[1].toLowerCase()]);
+  return out;
+}
+
+/** Digits the translation must keep: those inside glossary terms (2단계 인증) are not quantities. */
+function sourceNumbersKo(textKo: string, glossary: Record<string, string>): Set<string> {
+  let t = textKo;
+  for (const [ko] of termsIn(textKo, glossary)) t = t.split(ko).join(" ");
+  return numbersIn(t);
+}
+
 const sortedList = (s: Iterable<string>) => [...s].sort();
 
 export function checkReply(
@@ -136,8 +155,8 @@ export function checkReply(
   }
 
   if (sourceKo != null) {
-    const replyNumbers = numbersIn(reply);
-    const lost = [...numbersIn(sourceKo)].filter((n) => !replyNumbers.has(n));
+    const replyNumbers = translatedNumbers(reply);
+    const lost = [...sourceNumbersKo(sourceKo, glossary)].filter((n) => !replyNumbers.has(n));
     if (lost.length) findings.push({ code: "number_mismatch", level: "error", message: `번역문에서 숫자가 빠지거나 바뀌었습니다: ${sortedList(lost).join(", ")}` });
     for (const t of missingTerms(sourceKo, reply, glossary)) {
       findings.push({ code: "glossary", level: "warning", message: `용어집: '${t.ko}'는 "${t.en}"로 번역해야 합니다.` });

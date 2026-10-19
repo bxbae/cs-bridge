@@ -52,3 +52,14 @@ def test_email_format():
     assert {"email_greeting", "email_signoff"} <= codes(res)
     ok = check_reply("Hi Sam,\n\nPlease restart the game.\n\nBest regards,\nEric\nSupport", "email", [])
     assert ok["findings"] == []
+
+
+def test_glossary_term_digits_and_number_words_are_not_lost_numbers():
+    src = R.search("hacked account")
+    ok = check_reply("Please reset your password, enable two-step verification, then submit an appeal.", "chat", src,
+                     source_ko="비밀번호를 재설정하고 2단계 인증을 켠 다음 이의 신청해 주세요.")
+    assert "number_mismatch" not in codes(ok)
+    words = check_reply("The review takes three business days.", "chat", R.search("ban appeal"), source_ko="검토는 영업일 3일 걸립니다.")
+    assert "number_mismatch" not in codes(words)
+    still = check_reply("The review takes a few days.", "chat", R.search("ban appeal"), source_ko="검토는 영업일 3일 걸립니다.")
+    assert "number_mismatch" in codes(still)

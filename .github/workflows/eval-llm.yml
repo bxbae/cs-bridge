@@ -1,0 +1,54 @@
+name: LLM evaluation (Claude)
+
+# Manual run: Actions → "LLM evaluation (Claude)" → Run workflow.
+# Needs the repository secret ANTHROPIC_API_KEY (Settings → Secrets and variables → Actions).
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: Claude model
+        type: choice
+        options: [claude-sonnet-5-5, claude-haiku-5-5, claude-opus-5-5]
+        default: claude-sonnet-5-5
+      effort:
+        description: Effort (thinking depth) for these short JSON tasks
+        type: choice
+        options: [low, medium, high]
+        default: low
+
+permissions:
+  contents: read
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      LLM_PROVIDER: anthropic
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      ANTHROPIC_MODEL: ${{ inputs.model }}
+      ANTHROPIC_EFFORT: ${{ inputs.effort }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check API key
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::error::Repository secret ANTHROPIC_API_KEY is missing (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r backend/requirements.txt
+      - name: Run evaluation
+        working-directory: backend
+        run: python -m eval.run_eval
+      - name: Publish report on the run page
+        if: always()
+        run: test -f backend/eval/report-anthropic.md && cat backend/eval/report-anthropic.md >> "$GITHUB_STEP_SUMMARY" || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-${{ inputs.model }}-${{ inputs.effort }}
+          path: |
+            backend/eval/report-anthropic.md
+            backend/eval/metrics-anthropic.json
